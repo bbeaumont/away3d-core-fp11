@@ -6,15 +6,36 @@ package away3d.extrusions.utils
 {
 	import flash.geom.Vector3D;
 
+	/**
+	 * Defines a cubic path. Each segment of the path has two control points as opposed to <code>PathSegment</code> which being quadratic, has one control point.
+	 * @see away3d.animators.CubicPathAnimator
+	 * @see away3d.extrusions.utils.CubicPathSegment
+	 */
 	public class CubicPath
 	{
 		private static const POINTS_PER_SEGMENT:int = 4;
 
 		private var _segments:Vector.<CubicPathSegment>;
-		private var _worldAxis:Vector3D = new Vector3D(0.0, 1.0, 0.0);
+		private var _worldAxis:Vector3D;
 
 
+		/**
+		 * Creates a new CubicPath instance.
+		 * @param data See <code>pointData</code>
+		 */
 		public function CubicPath(data:Vector.<Vector3D> = null)
+		{
+			pointData = data;
+			_worldAxis = new Vector3D(0.0, 1.0, 0.0);
+		}
+
+
+		/**
+		 * A list of <code>Vector3D</code> objects, which must be in the following order:
+		 * a1, b1, c1, d1, a2, b2, c2, d2 ... where a = start point, b = first control point, c = second control point and d = end control point.
+		 * To avoid a broken path d1 and a2 must be equal.
+		 */
+		public function set pointData(data:Vector.<Vector3D>):void
 		{
 			if (data && data.length < POINTS_PER_SEGMENT)
 				throw new Error('Cubic path must contain at least ' + POINTS_PER_SEGMENT + 'Vector3Ds');
@@ -32,31 +53,66 @@ package away3d.extrusions.utils
 		}
 
 
-		public function add(segment:CubicPathSegment):void
-		{
-			_segments.push(segment);
-		}
-
-
+		/**
+		 * The number of <code>CubicPathSegment</code> instances in the path.
+		 */
 		public function get length():uint
 		{
 			return _segments.length;
 		}
 
 
+		/**
+		 * The <code>CubicPathSegment</code> instances which make up this path.
+		 */
 		public function get segments():Vector.<CubicPathSegment>
 		{
 			return _segments;
 		}
 
 
+		/**
+		 * The world axis.
+		 */
+		public function get worldAxis():Vector3D
+		{
+			return _worldAxis;
+		}
+
+
+		public function set worldAxis(value:Vector3D):void
+		{
+			_worldAxis = value;
+		}
+
+
+		/**
+		 * Returns the <code>CubicPathSegment</code> at the specified index
+		 * @param index The index of the segment
+		 * @return A <code>CubicPathSegment</code> instance
+		 */
 		public function getSegmentAt(index:uint):CubicPathSegment
 		{
 			return _segments[index];
 		}
 
 
-		public function removeSegment(index:uint, join:Boolean = false):void
+		/**
+		 * Adds a <code>CubicPathSegment</code> to the end of the path
+		 * @param segment
+		 */
+		public function add(segment:CubicPathSegment):void
+		{
+			_segments.push(segment);
+		}
+
+
+		/**
+		 * Removes a segment from the path
+		 * @param index The index of the <code>CubicPathSegment</code> to be removed
+		 * @param join Determines if the segments on either side of the removed segment should be adjusted so there is no gap.
+		 */
+		public function remove(index:uint, join:Boolean = false):void
 		{
 			if (_segments.length == 0 || index >= _segments.length - 1)
 				return;
@@ -93,43 +149,21 @@ package away3d.extrusions.utils
 			}
 
 			if (_segments.length > 1)
-			{
 				_segments.splice(index, 1);
-			}
 			else
-			{
 				_segments = new Vector.<CubicPathSegment>();
-			}
 		}
 
 
-		public function smoothPath():void
+		/**
+		 * Disposes the path and all the segments
+		 */
+		public function dispose():void
 		{
-			// TODO
-		}
-
-
-		public function continuousCurve(points:Vector.<Vector3D>, closed:Boolean = false):void
-		{
-			// TODO
-		}
-
-
-		public function averagePath():void
-		{
-			// TODO
-		}
-
-
-		public function get worldAxis():Vector3D
-		{
-			return _worldAxis;
-		}
-
-
-		public function set worldAxis(value:Vector3D):void
-		{
-			_worldAxis = value;
+			while (_segments.length > 0)
+				_segments[0].dispose();
+			_segments = null;
+			_worldAxis = null;
 		}
 	}
 }

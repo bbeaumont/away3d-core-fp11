@@ -6,13 +6,40 @@ package away3d.extrusions.utils
 {
 	import flash.geom.Vector3D;
 
+	/**
+	 * Defines a single segment of a cubic path
+	 * @see away3d.extrusions.utils.CubicPath
+	 */
 	public class CubicPathSegment
 	{
+		/**
+		 * The first anchor point.
+		 */
 		public var start:Vector3D;
+
+		/**
+		 * The first control point.
+		 */
 		public var control1:Vector3D;
+
+		/**
+		 * The second control point.
+		 */
 		public var control2:Vector3D;
+
+		/**
+		 * The last anchor point.
+		 */
 		public var end:Vector3D;
 
+
+		/**
+		 *
+		 * @param start The first anchor point.
+		 * @param control1 The first control point.
+		 * @param control2 The second control point.
+		 * @param end The last anchor point.
+		 */
 		public function CubicPathSegment(start:Vector3D, control1:Vector3D, control2:Vector3D, end:Vector3D)
 		{
 			this.start = start;
@@ -28,6 +55,9 @@ package away3d.extrusions.utils
 		}
 
 
+		/**
+		 * Destroys the segment
+		 */
 		public function dispose():void
 		{
 			start = control1 = control2 = end = null;
