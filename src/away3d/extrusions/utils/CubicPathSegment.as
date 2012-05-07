@@ -10,7 +10,7 @@ package away3d.extrusions.utils
 	 * Defines a single segment of a cubic path
 	 * @see away3d.extrusions.utils.CubicPath
 	 */
-	public class CubicPathSegment
+	public class CubicPathSegment implements IPathSegment
 	{
 		/**
 		 * The first anchor point.
@@ -55,9 +55,6 @@ package away3d.extrusions.utils
 		}
 
 
-		/**
-		 * Destroys the segment
-		 */
 		public function dispose():void
 		{
 			start = control1 = control2 = end = null;
