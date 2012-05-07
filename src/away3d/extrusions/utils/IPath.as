@@ -1,7 +1,3 @@
-/**
- * User: benbeaumont
- * Date: 07/05/2012
- */
 package away3d.extrusions.utils
 {
 	import flash.geom.Vector3D;
@@ -64,5 +60,31 @@ package away3d.extrusions.utils
 		 * Disposes the path and all the segments
 		 */
 		function dispose():void;
+
+
+		/**
+		 * returns true if the smoothPath handler is being used.
+		 */
+		function get smoothed():Boolean;
+
+
+		/**
+		 * returns true if the averagePath handler is being used.
+		 */
+		function get averaged():Boolean;
+
+
+		/**
+		 * handler will smooth the path using anchors as control vector of the PathSegments
+		 * note that this is not dynamic, the PathSegments values are overwrited
+		 */
+		function smoothPath():void;
+
+
+		/**
+		 * handler will average the path using averages of the PathSegments
+		 * note that this is not dynamic, the path values are overwrited
+		 */
+		function averagePath():void;
 	}
 }

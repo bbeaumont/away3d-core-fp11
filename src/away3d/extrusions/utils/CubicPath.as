@@ -1,7 +1,3 @@
-/**
- * User: benbeaumont
- * Date: 05/05/2012
- */
 package away3d.extrusions.utils
 {
 	import flash.geom.Vector3D;
@@ -95,29 +91,29 @@ package away3d.extrusions.utils
 				var prevSeg:CubicPathSegment = _segments[index - 1] as CubicPathSegment;
 				var nextSeg:CubicPathSegment = _segments[index + 1] as CubicPathSegment;
 
-				prevSeg.control1.x = (prevSeg.control1.x + seg.control1.x)*0.5;
-				prevSeg.control1.y = (prevSeg.control1.y + seg.control1.y)*0.5;
-				prevSeg.control1.z = (prevSeg.control1.z + seg.control1.z)*0.5;
+				prevSeg.pControl1.x = (prevSeg.pControl1.x + seg.pControl1.x)*0.5;
+				prevSeg.pControl1.y = (prevSeg.pControl1.y + seg.pControl1.y)*0.5;
+				prevSeg.pControl1.z = (prevSeg.pControl1.z + seg.pControl1.z)*0.5;
 
-				nextSeg.control1.x = (nextSeg.control1.x + seg.control1.x)*0.5;
-				nextSeg.control1.y = (nextSeg.control1.y + seg.control1.y)*0.5;
-				nextSeg.control1.z = (nextSeg.control1.z + seg.control1.z)*0.5;
+				nextSeg.pControl1.x = (nextSeg.pControl1.x + seg.pControl1.x)*0.5;
+				nextSeg.pControl1.y = (nextSeg.pControl1.y + seg.pControl1.y)*0.5;
+				nextSeg.pControl1.z = (nextSeg.pControl1.z + seg.pControl1.z)*0.5;
 
-				prevSeg.control2.x = (prevSeg.control2.x + seg.control2.x)*0.5;
-				prevSeg.control2.y = (prevSeg.control2.y + seg.control2.y)*0.5;
-				prevSeg.control2.z = (prevSeg.control2.z + seg.control2.z)*0.5;
+				prevSeg.pControl2.x = (prevSeg.pControl2.x + seg.pControl2.x)*0.5;
+				prevSeg.pControl2.y = (prevSeg.pControl2.y + seg.pControl2.y)*0.5;
+				prevSeg.pControl2.z = (prevSeg.pControl2.z + seg.pControl2.z)*0.5;
 
-				nextSeg.control2.x = (nextSeg.control2.x + seg.control2.x)*0.5;
-				nextSeg.control2.y = (nextSeg.control2.y + seg.control2.y)*0.5;
-				nextSeg.control2.z = (nextSeg.control2.z + seg.control2.z)*0.5;
+				nextSeg.pControl2.x = (nextSeg.pControl2.x + seg.pControl2.x)*0.5;
+				nextSeg.pControl2.y = (nextSeg.pControl2.y + seg.pControl2.y)*0.5;
+				nextSeg.pControl2.z = (nextSeg.pControl2.z + seg.pControl2.z)*0.5;
 
-				prevSeg.end.x = (seg.start.x + seg.end.x)*0.5;
-				prevSeg.end.y = (seg.start.y + seg.end.y)*0.5;
-				prevSeg.end.z = (seg.start.z + seg.end.z)*0.5;
+				prevSeg.pEnd.x = (seg.pStart.x + seg.pEnd.x)*0.5;
+				prevSeg.pEnd.y = (seg.pStart.y + seg.pEnd.y)*0.5;
+				prevSeg.pEnd.z = (seg.pStart.z + seg.pEnd.z)*0.5;
 
-				nextSeg.start.x = prevSeg.end.x;
-				nextSeg.start.y = prevSeg.end.y;
-				nextSeg.start.z = prevSeg.end.z;
+				nextSeg.pStart.x = prevSeg.pEnd.x;
+				nextSeg.pStart.y = prevSeg.pEnd.y;
+				nextSeg.pStart.z = prevSeg.pEnd.z;
 			}
 
 			if (_segments.length > 1)
@@ -133,6 +129,30 @@ package away3d.extrusions.utils
 				_segments[0].dispose();
 			_segments = null;
 			_worldAxis = null;
+		}
+
+
+		public function get smoothed():Boolean
+		{
+			return false;
+		}
+
+
+		public function get averaged():Boolean
+		{
+			return false;
+		}
+
+
+		public function smoothPath():void
+		{
+			// TODO - needs implementing
+		}
+
+
+		public function averagePath():void
+		{
+			// TODO - needs implementing
 		}
 	}
 }

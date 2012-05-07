@@ -1,7 +1,3 @@
-/**
- * User: benbeaumont
- * Date: 05/05/2012
- */
 package away3d.extrusions.utils
 {
 	import flash.geom.Vector3D;
@@ -15,49 +11,49 @@ package away3d.extrusions.utils
 		/**
 		 * The first anchor point.
 		 */
-		public var start:Vector3D;
+		public var pStart:Vector3D;
 
 		/**
 		 * The first control point.
 		 */
-		public var control1:Vector3D;
+		public var pControl1:Vector3D;
 
 		/**
 		 * The second control point.
 		 */
-		public var control2:Vector3D;
+		public var pControl2:Vector3D;
 
 		/**
 		 * The last anchor point.
 		 */
-		public var end:Vector3D;
+		public var pEnd:Vector3D;
 
 
 		/**
 		 *
-		 * @param start The first anchor point.
-		 * @param control1 The first control point.
-		 * @param control2 The second control point.
-		 * @param end The last anchor point.
+		 * @param pStart The first anchor point.
+		 * @param pControl1 The first control point.
+		 * @param pControl2 The second control point.
+		 * @param pEnd The last anchor point.
 		 */
-		public function CubicPathSegment(start:Vector3D, control1:Vector3D, control2:Vector3D, end:Vector3D)
+		public function CubicPathSegment(pStart:Vector3D, pControl1:Vector3D, pControl2:Vector3D, pEnd:Vector3D)
 		{
-			this.start = start;
-			this.control1 = control1;
-			this.control2 = control2;
-			this.end = end;
+			this.pStart = pStart;
+			this.pControl1 = pControl1;
+			this.pControl2 = pControl2;
+			this.pEnd = pEnd;
 		}
 
 
 		public function toString():String
 		{
-			return start + ", " + control1 + ", " + control2 + ", " + end;
+			return pStart + ", " + pControl1 + ", " + pControl2 + ", " + pEnd;
 		}
 
 
 		public function dispose():void
 		{
-			start = control1 = control2 = end = null;
+			pStart = pControl1 = pControl2 = pEnd = null;
 		}
 
 	}

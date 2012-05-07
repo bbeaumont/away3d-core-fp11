@@ -1,7 +1,5 @@
 ﻿package away3d.extrusions.utils
 {
-	import away3d.extrusions.utils.QuadraticPathSegment;
-
 	import flash.geom.Vector3D;
 
 	//import away3d.containers.Scene3D;
@@ -28,31 +26,22 @@
 		//private var _pathDebug:PathDebug;
 		 
         private var _segments:Vector.<IPathSegment>;
-		
-		/**
-    	 * The worldAxis of reference
-    	 */
 		private var _worldAxis:Vector3D = new Vector3D(0,1,0);
-    	
-		
         private var _smoothed:Boolean;
-		/**
-    	 * returns true if the smoothPath handler is being used.
-    	 */
+		private var _averaged:Boolean;
+
 		public function get smoothed():Boolean
 		{
 			return _smoothed;
 		}
-		
-		private var _averaged:Boolean;
-		/**
-    	* returns true if the averagePath handler is being used.
-    	*/
+
+
 		public function get averaged():Boolean
 		{
 			return _averaged;
 		}
-		
+
+
 		/**
 		 * display the path in scene
 		 */
@@ -135,19 +124,15 @@
 			return _segments[indice];
         }
 
-		
-		/**
-		 * handler will smooth the path using anchors as control vector of the PathSegments 
-		 * note that this is not dynamic, the PathSegments values are overwrited
-		 */
+
 		public function smoothPath():void
-        {
-			if(_segments.length <= 2)
+		{
+			if (_segments.length <= 2)
 				return;
-			 
+
 			_smoothed = true;
 			_averaged = false;
-			 
+
 			var x:Number;
 			var y:Number;
 			var z:Number;
@@ -157,64 +142,63 @@
 			var i:uint;
 
 			var seg:QuadraticPathSegment = _segments[0] as QuadraticPathSegment;
-			var segnext:QuadraticPathSegment = _segments[_segments.length-1] as QuadraticPathSegment;
+			var segnext:QuadraticPathSegment = _segments[_segments.length - 1] as QuadraticPathSegment;
 
 			var startseg:Vector3D = new Vector3D(seg.pStart.x, seg.pStart.y, seg.pStart.z);
 			var endseg:Vector3D = new Vector3D(segnext.pEnd.x, segnext.pEnd.y, segnext.pEnd.z);
 
-			for(i = 0; i< length-1; ++i)
+			for (i = 0; i < length - 1; ++i)
 			{
 				seg = _segments[i] as QuadraticPathSegment;
 				segnext = _segments[i + 1] as QuadraticPathSegment;
 
-				if(seg.pControl == null)
+				if (seg.pControl == null)
 					seg.pControl = seg.pEnd;
-				
-				if(segnext.pControl == null)
+
+				if (segnext.pControl == null)
 					segnext.pControl = segnext.pEnd;
-				
+
 				seg0 = seg.pControl;
 				seg1 = segnext.pControl;
-				x = (seg0.x + seg1.x) * .5;
-				y = (seg0.y + seg1.y) * .5;
-				z = (seg0.z + seg1.z) * .5;
-				
-				tmp.push( startseg,  new Vector3D(seg0.x, seg0.y, seg0.z), new Vector3D(x, y, z));
+				x = (seg0.x + seg1.x)*.5;
+				y = (seg0.y + seg1.y)*.5;
+				z = (seg0.z + seg1.z)*.5;
+
+				tmp.push(startseg, new Vector3D(seg0.x, seg0.y, seg0.z), new Vector3D(x, y, z));
 				startseg = new Vector3D(x, y, z);
 				seg = null;
 			}
-			
-			seg0 = QuadraticPathSegment(_segments[_segments.length-1]).pControl;
-			tmp.push( startseg,  new Vector3D((seg0.x+seg1.x)*.5, (seg0.y+seg1.y)*.5, (seg0.z+seg1.z)*.5), endseg);
-			
+
+			seg0 = QuadraticPathSegment(_segments[_segments.length - 1]).pControl;
+			tmp.push(startseg, new Vector3D((seg0.x + seg1.x)*.5, (seg0.y + seg1.y)*.5, (seg0.z + seg1.z)*.5), endseg);
+
 			_segments = new Vector.<IPathSegment>();
-			
-			for(i = 0; i<tmp.length; i+=3)
-				_segments.push( new QuadraticPathSegment(tmp[i], tmp[i+1], tmp[i+2]) );
-			 
+
+			for (i = 0; i < tmp.length; i += 3)
+				_segments.push(new QuadraticPathSegment(tmp[i], tmp[i + 1], tmp[i + 2]));
+
 			tmp = null;
 		}
-		
-		/**
-		 * handler will average the path using averages of the PathSegments
-		 * note that this is not dynamic, the path values are overwrited
-		 */
+
+
 		public function averagePath():void
-        {
+		{
 			_averaged = true;
 			_smoothed = false;
 
 			var seg:QuadraticPathSegment;
 
-			for(var i:uint = 0; i<_segments.length; ++i){
+			for (var i:uint = 0; i < _segments.length; ++i)
+			{
 				seg = _segments[i] as QuadraticPathSegment;
-				seg.pControl.x = (seg.pStart.x+seg.pEnd.x)*.5;
-				seg.pControl.y = (seg.pStart.y+seg.pEnd.y)*.5;
-				seg.pControl.z = (seg.pStart.z+seg.pEnd.z)*.5;
+				seg.pControl.x = (seg.pStart.x + seg.pEnd.x)*.5;
+				seg.pControl.y = (seg.pStart.y + seg.pEnd.y)*.5;
+				seg.pControl.z = (seg.pStart.z + seg.pEnd.z)*.5;
 			}
-        }
-        
-  		public function continuousCurve(points:Vector.<Vector3D>, closed:Boolean = false):void
+		}
+
+
+		public function continuousCurve(points:Vector.<Vector3D>, closed:Boolean = false):void
   		{
   			var aVectors:Vector.<Vector3D> = new Vector.<Vector3D>();
   			var i:uint;

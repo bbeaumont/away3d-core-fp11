@@ -1,7 +1,5 @@
 ﻿package away3d.extrusions.utils
 {
-	import away3d.extrusions.utils.IPath;
-
 	import flash.geom.Vector3D;
 
 	/**
@@ -103,7 +101,7 @@
 			for (var i:uint = 0, len:uint = path.length; i < len; ++i)
 			{
 				var segment:CubicPathSegment = path.segments[i] as CubicPathSegment;
-				output[i] = getCubicSegmentPoints(segment.start, segment.control1, segment.control2, segment.end, subdivision, (i == path.length - 1));
+				output[i] = getCubicSegmentPoints(segment.pStart, segment.pControl1, segment.pControl2, segment.pEnd, subdivision, (i == path.length - 1));
 			}
 		}
 		
@@ -189,9 +187,9 @@
 			const c:Number = 3*t*t*td;
 			const d:Number = t*t*t;
 
-			v.x = a*ps.start.x + b*ps.control1.x + c*ps.control2.x + d*ps.end.x;
-			v.y = a*ps.start.y + b*ps.control1.y + c*ps.control2.y + d*ps.end.y;
-			v.z = a*ps.start.z + b*ps.control1.z + c*ps.control2.z + d*ps.end.z;
+			v.x = a*ps.pStart.x + b*ps.pControl1.x + c*ps.pControl2.x + d*ps.pEnd.x;
+			v.y = a*ps.pStart.y + b*ps.pControl1.y + c*ps.pControl2.y + d*ps.pEnd.y;
+			v.z = a*ps.pStart.z + b*ps.pControl1.z + c*ps.pControl2.z + d*ps.pEnd.z;
 
 			return v;
 		}
