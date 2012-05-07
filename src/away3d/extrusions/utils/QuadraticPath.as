@@ -21,15 +21,7 @@
 		 
         public function QuadraticPath(aVectors:Vector.<Vector3D> = null)
         {
-			if(aVectors!= null && aVectors.length < 3)
-				throw new Error("Path Vector.<Vector3D> must contain at least 3 Vector3D's");
-			
-            _segments = new Vector.<IPathSegment>();
-			
-			if(aVectors != null)
-				for(var i:int = 0; i<aVectors.length; i+=3)
-					_segments.push( new QuadraticPathSegment(aVectors[i], aVectors[i+1], aVectors[i+2]));
-			 
+			pointData = aVectors;
         }
 		
 		 
@@ -142,46 +134,7 @@
         {
 			return _segments[indice];
         }
-        
-		/**
-		 * removes a segment in the path according to id.
-		 *
-		 * @param	 index	int. The index in path of the to be removed curvesegment 
-		 * @param	 join 		Boolean. If true previous and next segments coordinates are reconnected
-		 */
-		public function removeSegment(index:int, join:Boolean = false):void
-        {
-			if(_segments.length == 0 || _segments[index ] == null )
-				return;
-			
-			if(join && index < _segments.length-1 && index>0){
-				var seg:QuadraticPathSegment = _segments[index] as QuadraticPathSegment;
-				var prevSeg:QuadraticPathSegment = _segments[index-1] as QuadraticPathSegment;
-				var nextSeg:QuadraticPathSegment = _segments[index+1] as QuadraticPathSegment;
-				prevSeg.pControl.x = (prevSeg.pControl.x+seg.pControl.x)*.5;
-				prevSeg.pControl.y = (prevSeg.pControl.y+seg.pControl.y)*.5;
-				prevSeg.pControl.z = (prevSeg.pControl.z+seg.pControl.z)*.5;
-				nextSeg.pControl.x = (nextSeg.pControl.x+seg.pControl.x)*.5;
-				nextSeg.pControl.y = (nextSeg.pControl.y+seg.pControl.y)*.5;
-				nextSeg.pControl.z = (nextSeg.pControl.z+seg.pControl.z)*.5;
-				prevSeg.pEnd.x = (seg.pStart.x + seg.pEnd.x)*.5;
-				prevSeg.pEnd.y = (seg.pStart.y + seg.pEnd.y)*.5;
-				prevSeg.pEnd.z = (seg.pStart.z + seg.pEnd.z)*.5;
-				nextSeg.pStart.x = prevSeg.pEnd.x;
-				nextSeg.pStart.y = prevSeg.pEnd.y;
-				nextSeg.pStart.z = prevSeg.pEnd.z;
-				
-				/*if(_pathDebug != null)
-					_pathDebug.updateAnchorAt(index-1);
-					_pathDebug.updateAnchorAt(index+1);*/
-			}
-			
-			if(_segments.length > 1){
-				_segments.splice(index, 1);
-			} else{
-				_segments = new Vector.<IPathSegment>();
-			}
-        }
+
 		
 		/**
 		 * handler will smooth the path using anchors as control vector of the PathSegments 
@@ -312,27 +265,70 @@
 
 		public function set pointData(data:Vector.<Vector3D>):void
 		{
+			if(data!= null && data.length < 3)
+				throw new Error("Path Vector.<Vector3D> must contain at least 3 Vector3D's");
+
+			_segments = new Vector.<IPathSegment>();
+
+			if(data != null)
+				for(var i:int = 0; i<data.length; i+=3)
+					_segments.push( new QuadraticPathSegment(data[i], data[i+1], data[i+2]));
 		}
 
 
 		public function get worldAxis():Vector3D
 		{
-			return null;
+			return _worldAxis;
 		}
 
 
 		public function set worldAxis(value:Vector3D):void
 		{
+			_worldAxis = value;
 		}
 
 
 		public function remove(index:uint, join:Boolean = false):void
 		{
+			if(_segments.length == 0 || _segments[index ] == null )
+				return;
+
+			if(join && index < _segments.length-1 && index>0){
+				var seg:QuadraticPathSegment = _segments[index] as QuadraticPathSegment;
+				var prevSeg:QuadraticPathSegment = _segments[index-1] as QuadraticPathSegment;
+				var nextSeg:QuadraticPathSegment = _segments[index+1] as QuadraticPathSegment;
+				prevSeg.pControl.x = (prevSeg.pControl.x+seg.pControl.x)*.5;
+				prevSeg.pControl.y = (prevSeg.pControl.y+seg.pControl.y)*.5;
+				prevSeg.pControl.z = (prevSeg.pControl.z+seg.pControl.z)*.5;
+				nextSeg.pControl.x = (nextSeg.pControl.x+seg.pControl.x)*.5;
+				nextSeg.pControl.y = (nextSeg.pControl.y+seg.pControl.y)*.5;
+				nextSeg.pControl.z = (nextSeg.pControl.z+seg.pControl.z)*.5;
+				prevSeg.pEnd.x = (seg.pStart.x + seg.pEnd.x)*.5;
+				prevSeg.pEnd.y = (seg.pStart.y + seg.pEnd.y)*.5;
+				prevSeg.pEnd.z = (seg.pStart.z + seg.pEnd.z)*.5;
+				nextSeg.pStart.x = prevSeg.pEnd.x;
+				nextSeg.pStart.y = prevSeg.pEnd.y;
+				nextSeg.pStart.z = prevSeg.pEnd.z;
+
+				/*if(_pathDebug != null)
+				 _pathDebug.updateAnchorAt(index-1);
+				 _pathDebug.updateAnchorAt(index+1);*/
+			}
+
+			if(_segments.length > 1){
+				_segments.splice(index, 1);
+			} else{
+				_segments = new Vector.<IPathSegment>();
+			}
 		}
 
 
 		public function dispose():void
 		{
+			while (_segments.length > 0)
+				_segments[0].dispose();
+			_segments = null;
+			_worldAxis = null;
 		}
 	}
 }

@@ -181,8 +181,6 @@
 
 		public static function calcCubicPosition(t:Number, ps:CubicPathSegment, out:Vector3D):Vector3D
 		{
-			// (1 - t)^3*start + 3*t*(1 - t)^2*control1 + 3*t^2*(1 - t)*control2 + t^3*end
-
 			var v:Vector3D = out || new Vector3D();
 
 			const td:Number = 1 - t;
