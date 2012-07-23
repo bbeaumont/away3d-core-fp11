@@ -609,6 +609,7 @@ package away3d.materials.passes
 			_ambientMethod._lightAmbientR = _ambientLightR;
 			_ambientMethod._lightAmbientG = _ambientLightG;
 			_ambientMethod._lightAmbientB = _ambientLightB;
+			_ambientMethod.activate(_ambientMethodVO, stage3DProxy);
 
 			if (_shadowMethod) _shadowMethod.setRenderState(_shadowMethodVO, renderable, stage3DProxy, camera);
 			_diffuseMethod.setRenderState(_diffuseMethodVO, renderable, stage3DProxy, camera);
